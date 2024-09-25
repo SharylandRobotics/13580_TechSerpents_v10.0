@@ -141,7 +141,7 @@ public class RobotHardware {
      */
 
     public void driveFieldCentric(double axial, double lateral, double yaw) {
-        double botHeading
+
         double max;
 
         // Combine drive and Turn for blended motion.
