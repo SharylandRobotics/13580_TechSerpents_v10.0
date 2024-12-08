@@ -1,47 +1,117 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.IMU;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-@TeleOp
-public class FieldCentric extends LinearOpMode{
-    RobotHardware robot= new RobotHardware(this);
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+
+@TeleOp (name = "Field Centric", group = "Robot")
+
+public class FieldCentric extends LinearOpMode {
+    RobotHardware robot = new RobotHardware(this);
+
     @Override
-    public void runOpMode() throws InterruptedException{
+    public void runOpMode() {
+        double axial = 0;
+        double lateral = 0;
+        double yaw = 0;
+        double handOffset = 0;
+        double upDown = 0;
+        double spoolie = 0;
+        double armPositionFudgeFactor;
+        double hangPositionFudgeFactor;
+        double hang=0;
+        double elbowHang=0;
+
+
         robot.init();
-        IMU imu= hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters= new IMU.Parameters( new RevHubOrientationOnRobot(
-           RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-           RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        imu.initialize(parameters);
+        double armPosition = robot.ARM_COLLAPSED_INTO_ROBOT;
+
 
         waitForStart();
 
-        if (isStopRequested()) return;
-        double axial=0;
-        double lateral=0;
-        double yaw=0;
+        while (opModeIsActive()) {
+            //Assigned the movement to the joystick in the game controller
+            axial = -gamepad1.left_stick_y * 0.5;
+            lateral = gamepad1.left_stick_x * 1.1;
+            yaw = gamepad1.right_stick_x;
+            //passes the values to the method called driveFieldCentric in the robot hardware class
+            robot.driveFieldCentric(axial, lateral, yaw);
 
-        while(opModeIsActive()){
-            axial= -gamepad1.left_stick_y;
-            lateral= gamepad1.left_stick_x;
-            yaw=gamepad1.right_stick_x;
 
-            if(gamepad1.options){
-                imu.resetYaw();
+            // assigns the gamepad 1 right bumper to open the claw  and the gamepad 1 left bumper to close the claw
+            if (gamepad1.right_bumper) {
+                handOffset += robot.HAND_SPEED;
+            } else if (gamepad1.left_bumper) {
+                handOffset -= robot.HAND_SPEED;
             }
+            handOffset = Range.clip(handOffset, -0.1, 0.5);
+            //passes the positions of the hand to the robotHardware class without this line it will not move
+            robot.setHandPositions(handOffset);
 
-            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            //passes the position of the elbow of the robot(the motor in the arm, not the spoolie)
+            //to up when pressing the right bumper in the game controller 2
+            // ad to down when pressing the left bumper of gam controller 2
+            if (gamepad2.right_bumper) {
+                spoolie = robot.ARM_UP_POWER;
+            } else if (gamepad2.left_bumper) {
+                spoolie = robot.ARM_DOWN_POWER;
+            } else {
+                spoolie = 0;
+            }
+            robot.setSpooliePower(spoolie);
 
-            double rotX = lateral * Math.cos(-botHeading) - axial * Math.sin(-botHeading);
-            double rotY = lateral * Math.sin(-botHeading) + axial * Math.cos(-botHeading);
+            if (gamepad1.x) {
+                hang = robot.ARM_UP_POWER;
+            } else if (gamepad1.y) {
+                hang = robot.ARM_DOWN_POWER;
+            } else {
+                hang = 0;
+            }
+            robot.setHangPower(hang);
 
-            rotX = rotX * 1.1;
+            //position of the arm of the robot using encoders
+            if (gamepad2.a) {
+                armPosition = robot.ARM_COLLAPSED_INTO_ROBOT;
+            } else if (gamepad2.b) {
+                armPosition = robot.ARM_ATTACH_HANGING_HOOK;
+            } else if (gamepad2.x) {
+                armPosition = robot.ARM_CLEAR_BARRIER;
+            } else if (gamepad2.y) {
+                armPosition = robot.ARM_SCORE_SAMPLE_IN_LOW;
+            }else if (gamepad2.dpad_down){
+                armPosition= robot.ARM_SECURE_SPECIMEN;
+            }else if(gamepad2.dpad_up){
+                armPosition = robot.ARM_SCORE_SPECIMEN;
+            }else if(gamepad2.dpad_left){
+               armPosition= robot.ARM_SCORE;
+            }else if(gamepad2.dpad_right){
+                armPosition= robot.ARM_SPECIMEN;
+            }else if(gamepad2.left_stick_button){
+                armPosition=robot.ARM_COLLECT;
+            }
+            armPositionFudgeFactor = robot.FUDGE_FACTOR * (gamepad1.right_trigger + (-gamepad1.left_trigger));
 
-            robot.driveFieldCentric(rotX,rotY, yaw);
+            robot.upDown.setTargetPosition((int) (armPosition + armPositionFudgeFactor));
+            ((DcMotorEx)robot.upDown).setVelocity(2100);
+            robot.upDown.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            if(gamepad1.a){
+                elbowHang= robot.HANG_UP;
+            }else if(gamepad1.b){
+                elbowHang= robot.HANG_COLLAPSED_INTO_ROBOT;
+            }
+            hangPositionFudgeFactor = robot.FUDGE_FACTOR * (gamepad1.right_trigger + (-gamepad1.left_trigger));
+
+            robot.elbowHang.setTargetPosition((int) (elbowHang + hangPositionFudgeFactor));
+            ((DcMotorEx)robot.elbowHang).setVelocity(1000);
+            robot.elbowHang.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
 
         }

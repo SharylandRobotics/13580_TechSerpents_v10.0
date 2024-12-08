@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-@TeleOp(name= "Comcept: Rpbpt Hardware Class", group="Robot")
+@TeleOp(name= "MyRobotCentric", group="Robot")
 @Disabled
 public class TCRobotCentric extends LinearOpMode{
     RobotHardware robot= new RobotHardware(this);
@@ -26,7 +27,7 @@ public class TCRobotCentric extends LinearOpMode{
             lateral= gamepad1.left_stick_x;
             yaw= gamepad1.right_stick_x;
 
-            robot.driveRobot(axial,lateral,yaw);
+            robot.driveRobotCentric(axial,lateral,yaw);
 
             if(gamepad1.right_bumper){
                 handOffset += robot.HAND_SPEED;
