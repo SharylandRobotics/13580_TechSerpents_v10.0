@@ -37,12 +37,11 @@ public class FieldCentric extends LinearOpMode {
 
         while (opModeIsActive()) {
             //Assigned the movement to the joystick in the game controller
-            axial = -gamepad1.left_stick_y * 0.5;
+            axial = -gamepad1.left_stick_y ;
             lateral = gamepad1.left_stick_x * 1.1;
             yaw = gamepad1.right_stick_x;
             //passes the values to the method called driveFieldCentric in the robot hardware class
             robot.driveFieldCentric(axial, lateral, yaw);
-
 
             // assigns the gamepad 1 right bumper to open the claw  and the gamepad 1 left bumper to close the claw
             if (gamepad1.right_bumper) {

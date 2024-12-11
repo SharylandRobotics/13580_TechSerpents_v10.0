@@ -29,11 +29,11 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         sleep(1000);
         //Don't touch this it already works
 
-        robot.encoderArm(73.5, 10);
+        robot.encoderArm(73, 10);
 
 
         //go straight for 2 squares
-        robot.encoderDrive(0.5,24.0,24.0,24.0,24.0, 15);
+        robot.encoderDrive(0.7,24.0,24.0,24.0,24.0, 15);
         /*
         robot.setDrivePower(0.5,0.5,0.5,0.5);
         runtime.reset();
@@ -45,7 +45,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
 
 
         //strafe to the left a little bit
-        robot.encoderDrive(0.5,-10.0,10.0,10.0,-10.0, 15);
+        robot.encoderDrive(0.6,-10.0,10.0,10.0,-10.0, 15);
         /*
         robot.setDrivePower(-0.5,0.5,0.5,-0.5);
         runtime.reset();
@@ -78,41 +78,42 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
             telemetry.addData("Path", "Leg6: %41f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        robot.encoderDrive(0.5,-4.0,-4.0,-4.0,-4.0,15);
+        robot.encoderDrive(0.8,-4.0,-4.0,-4.0,-4.0,15);
         robot.encoderArm(0,15);
-        robot.encoderDrive(0.5,33.0,-33.0,-33.0,33.0, 15);
-        robot.encoderDrive(0.5,24.0,24.0,24.0,24.0,15);
-        robot.encoderDrive(0.5,12.0,-12.0,-12.0,12.0, 15);
-        robot.encoderDrive(0.5,-47.0,-47.0,-47.0,-47.0, 15);
-        sleep(100);
-        robot.encoderDrive(0.5, 47.0, 47.0, 47.0, 47.0, 15);
-        sleep(100);
-        robot.encoderDrive(0.5, 11.5, -11.5, -11.5, 11.5, 15);
-        sleep(100);
-        robot.encoderDrive(0.5,-47.0,-47.0,-47.0,-47.0, 15);
-        sleep(100);
-        robot.encoderDrive(0.5, 47.0, 47.0, 47.0, 47.0, 15);
-        sleep(100);
-        robot.encoderDrive(0.5, 11.6, -11.6, -11.6, 11.6, 15);
-        sleep(100);
-        robot.encoderDrive(0.5, -47.0, -47.0, -47.0, -47.0, 15);
-        sleep(100);
-        robot.encoderDrive(0.5, -23,23,23,-23,15);
-        robot.encoderDrive(0.2, -2,2,2,-2,12);
-        robot.encoderDrive(0.2,-0.5,0.5,0.5,-0.5,12);
-        robot.encoderDrive(0.5, 17,17,17,17,12);
-        robot.encoderDrive(0.5,-45,-45,45,45,15);
-        robot.encoderDrive(0.5,22.5,22.5,22.5,22.5,15);
+        robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
+        robot.encoderDrive(0.8,24.0,24.0,24.0,24.0,15);
+        robot.encoderDrive(0.8,10,-10,-10,10, 15);
+        robot.encoderDrive(1,-44.0,-44.0,-44.0,-44.0, 15);
+        sleep(300);
+        robot.encoderDrive(0.8, 47.0, 47.0, 47.0, 47.0, 15);
+        sleep(200);
+        robot.encoderDrive(0.8, 15.5, -15.5, -15.5, 15.5, 15);
+        sleep(300);
+        robot.encoderDrive(0.8,-45.0,-45.0,-45.0,-45.0, 15);
+        sleep(300);
+        robot.encoderDrive(0.8, 47.0, 47.0, 47.0, 47.0, 15);
+        sleep(200);
+        robot.encoderDrive(0.8, 11, -11, -11, 11, 15);
+        sleep(300);
+        robot.encoderDrive(0.8, -45.0, -45.0, -45.0, -45.0, 15);
+        sleep(200);
+        robot.encoderDrive(0.8, 17,17,17,17,12);
+        sleep(200);
+        robot.encoderDrive(0.8, -25,25,25,-25,15);
+        sleep(200);
+        robot.encoderDrive(0.8,-44.5,-44.5,44.5,44.5,15);
+        sleep(200);
+        robot.encoderDrive(0.8,24.25,24.25,24.25,24.25,15);
+        sleep(200);
 
-        robot.encoderArm(30,10);
-        sleep(1000);
+        robot.encoderArm(22,10);
         robot.setHandPositions(-0.8);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
             telemetry.update();
         }
         sleep(1100);
-        robot.encoderArm(60,10);
+        robot.encoderArm(40,20);
 
 
 

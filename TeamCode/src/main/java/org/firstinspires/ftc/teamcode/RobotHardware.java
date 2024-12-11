@@ -14,6 +14,7 @@ class, rather than accessing the internal hardware directly. This is why the obj
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -49,12 +50,12 @@ public class RobotHardware {
             * 1/ 360.0;
 
     public final double ARM_COLLAPSED_INTO_ROBOT  = 0;
-    public final double ARM_SPECIMEN              = 5*ARM_TICKS_PER_DEGREE;
+    public final double ARM_SPECIMEN              = 8*ARM_TICKS_PER_DEGREE;
     public final double ARM_SCORE                 = 98 * ARM_TICKS_PER_DEGREE;
     public final double ARM_CLEAR_BARRIER         = 20 * ARM_TICKS_PER_DEGREE;
     public final double ARM_SCORE_SPECIMEN        = 83 * ARM_TICKS_PER_DEGREE;
-    public final double ARM_SCORE_SAMPLE_IN_LOW   = 110 * ARM_TICKS_PER_DEGREE;
-    public final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SCORE_SAMPLE_IN_LOW   = 107 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_ATTACH_HANGING_HOOK   = 130 * ARM_TICKS_PER_DEGREE;
     public final double ARM_SECURE_SPECIMEN       = 70  * ARM_TICKS_PER_DEGREE;
     public final double ARM_COLLECT               = 31 * ARM_TICKS_PER_DEGREE;
     public final double FUDGE_FACTOR              = 15 * ARM_TICKS_PER_DEGREE;
@@ -355,6 +356,7 @@ public class RobotHardware {
             // reset the timeout time and start motion.
             runtime.reset();
             setDrivePower(Math.abs(speed),Math.abs(speed),Math.abs(speed),Math.abs(speed));
+            upDown.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
