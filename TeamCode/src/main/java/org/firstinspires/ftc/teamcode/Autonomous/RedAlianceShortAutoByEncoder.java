@@ -79,31 +79,33 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
             telemetry.update();
         }
         robot.encoderDrive(0.8,-4.0,-4.0,-4.0,-4.0,15);
-        robot.encoderArm(0,15);
+        //robot.encoderArm(0,15);
         robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
         robot.encoderDrive(0.8,24.0,24.0,24.0,24.0,15);
+        sleep(200);
         robot.encoderDrive(0.8,10,-10,-10,10, 15);
         robot.encoderDrive(1,-44.0,-44.0,-44.0,-44.0, 15);
-        sleep(300);
+        sleep(400);
         robot.encoderDrive(0.8, 47.0, 47.0, 47.0, 47.0, 15);
         sleep(200);
-        robot.encoderDrive(0.8, 15.5, -15.5, -15.5, 15.5, 15);
+        robot.encoderDrive(0.8, 16.5, -16.5, -16.5, 16.5, 15);
         sleep(300);
         robot.encoderDrive(0.8,-45.0,-45.0,-45.0,-45.0, 15);
-        sleep(300);
-        robot.encoderDrive(0.8, 47.0, 47.0, 47.0, 47.0, 15);
-        sleep(200);
-        robot.encoderDrive(0.8, 11, -11, -11, 11, 15);
-        sleep(300);
-        robot.encoderDrive(0.8, -45.0, -45.0, -45.0, -45.0, 15);
+        sleep(400);
+        //robot.encoderDrive(0.8, 47.0, 47.0, 47.0, 47.0, 15);
+        //sleep(200);
+        //robot.encoderDrive(0.8, 11, -11, -11, 11, 15);
+        //sleep(400);
+        //robot.encoderDrive(0.8, -45.0, -45.0, -45.0, -45.0, 15);
         sleep(200);
         robot.encoderDrive(0.8, 17,17,17,17,12);
         sleep(200);
-        robot.encoderDrive(0.8, -25,25,25,-25,15);
+        robot.encoderDrive(0.8, -19,19,19,-19,15);
         sleep(200);
-        robot.encoderDrive(0.8,-44.5,-44.5,44.5,44.5,15);
+        robot.encoderDrive(0.8,-45.5,-45.5,45.5,45.5,15);
         sleep(200);
-        robot.encoderDrive(0.8,24.25,24.25,24.25,24.25,15);
+        //this is the value that makes the robot approach the wall to pick specimen
+        robot.encoderDrive(0.8,21.615,21.615,21.615,21.615,15);
         sleep(200);
 
         robot.encoderArm(22,10);
@@ -114,8 +116,30 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         }
         sleep(1100);
         robot.encoderArm(40,20);
+        robot.encoderDrive(1, -15.265,-15.265,-15.265,-15.265,15);
+        robot.encoderDrive(0.8,-47,-47,47,47,15);
+        sleep(200);
+        //Strafes to the left to place sample
+        robot.encoderDrive(1, -50,50,50,-50,15);
+        //makes the arm go up
+        robot.encoderArm(13,10);
+        robot.encoderDrive(0.8,10.3,10.3,10.3,10.3,15);
+
+        sleep(150);
+        //makes arm go down
+        robot.encoderArm(-35,10);
 
 
+        //Open claw
+        robot.setHandPositions(0.5);
+        while(opModeIsActive()&& (runtime.seconds()<0.5)){
+            telemetry.addData("Path", "Leg6: %41f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        sleep(1000);
+        robot.encoderDrive(0.8, 12, -12,-12,12,15);
+        robot.encoderDrive(0.8, -25,-25,-25,-25,15);
+        robot.encoderDrive(0.8, 35,-35,-35,35,15);
 
         //The don't touch has ended, you can now modify the code
         /* Hello, let me show you the basics
