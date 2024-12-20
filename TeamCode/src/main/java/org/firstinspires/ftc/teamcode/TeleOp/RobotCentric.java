@@ -70,7 +70,7 @@ public class RobotCentric extends LinearOpMode {
             } else if (gamepad1.left_bumper) {
                 handOffset -= robot.HAND_SPEED;
             }
-            handOffset = Range.clip(handOffset, -0.5, 0.6);
+            handOffset = Range.clip(handOffset, -0.1, 0.5);
             //passes the positions of the hand to the robotHardware class without this line it will not move
             robot.setHandPositions(handOffset);
 
@@ -111,7 +111,9 @@ public class RobotCentric extends LinearOpMode {
             }else if(gamepad2.dpad_left){
                 armPosition= robot.ARM_SCORE;
             }else if(gamepad2.dpad_right){
-                armPosition= robot.ARM_COLLECT;
+                armPosition= robot.ARM_SPECIMEN;
+            }else if(gamepad2.left_stick_button){
+                armPosition=robot.ARM_COLLECT;
             }
             armPositionFudgeFactor = robot.FUDGE_FACTOR * (gamepad1.right_trigger + (-gamepad1.left_trigger));
 

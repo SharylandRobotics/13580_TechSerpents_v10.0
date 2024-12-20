@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import android.util.Size;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RobotHardware;
-
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 
 @Autonomous(name="Robot red: Auto Drive By Encoder", group="Robot")
@@ -18,7 +22,21 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
     @Override
     public void runOpMode(){
         robot.init();
+        double heading;
         waitForStart();
+        AprilTagProcessor tag= new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setLensIntrinsics(1130.80338323,1130.80338323, 1280.21111078, 368.731101737 )
+                .build();
+
+        VisionPortal visionPortal = new VisionPortal.Builder()
+                .addProcessor(tag)
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCameraResolution(new Size(640, 480))
+                .build();
 
         //Closes the claw to secure the specimen
         robot.setHandPositions(-0.8);
@@ -30,7 +48,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         //Don't touch this it already works
 
         robot.encoderArm(73, 10);
-
+        //robot.upDown.setTargetPosition((int)((73*robot.ARM_TICKS_PER_DEGREE)));
 
         //go straight for 2 squares
         robot.encoderDrive(0.7,24.0,24.0,24.0,24.0, 15);
@@ -69,27 +87,58 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         sleep(1000);
 */
         //makes the elbow go down
-        robot.encoderArm(-35,10);
+        robot.encoderArm(-25,10);
 
-
+        sleep(100);
         //Open claw
         robot.setHandPositions(0.5);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg6: %41f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        robot.encoderDrive(0.8,-4.0,-4.0,-4.0,-4.0,15);
-        //robot.encoderArm(0,15);
+        robot.encoderDrive(0.8,-4.5,-4.5,-4.5,-4.5,15);
+        robot.encoderArm(-70 ,15);
         robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
-        robot.encoderDrive(0.8,24.0,24.0,24.0,24.0,15);
+        robot.encoderDrive(0.8,24.3,24.3,24.3,24.3,15);
         sleep(200);
-        robot.encoderDrive(0.8,10,-10,-10,10, 15);
-        robot.encoderDrive(1,-44.0,-44.0,-44.0,-44.0, 15);
-        sleep(400);
+        robot.encoderDrive(0.8,12,-12,-12,12, 15);
+        // correft before 1st sample
+        heading = (int)Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+        if (heading !=    0) {
+            robot.setDrivePower(0.3,0.3,-0.3,-0.3);
+        }
+        while (heading != 0) {
+            heading =(int) Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+            telemetry.addData("CORRECTING", "...");
+            if (heading == 0){ robot.setDrivePower(0,0,0,0); break;}
+        }
+        robot.encoderDrive(0.8,-44.0,-44.0,-44.0,-44.0, 20);
+        // correct after 1st sample
+        heading = (int)Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+        if (heading != 0) {
+            robot.setDrivePower(0.3,0.3,-0.3,-0.3);
+        }
+        while (heading != 0) {
+            heading = Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+            telemetry.addData("CORRECTING", "...");
+            if (heading == 0){ robot.setDrivePower(0,0,0,0); break;}
+        }
+        sleep(600);
         robot.encoderDrive(0.8, 47.0, 47.0, 47.0, 47.0, 15);
         sleep(200);
-        robot.encoderDrive(0.8, 16.5, -16.5, -16.5, 16.5, 15);
+        robot.encoderDrive(0.8, 15.5, -15.5, -15.5, 15.5, 15);
         sleep(300);
+        heading = (int)Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+
+        if (heading != 0) {
+            robot.setDrivePower(0.3,0.3,-0.3,-0.3);
+        }
+        while (heading != 0) {
+            heading = Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+            telemetry.addData("CORRECTING", "...");
+            if (heading == 0){ robot.setDrivePower(0,0,0,0); break;}
+        }
+
         robot.encoderDrive(0.8,-45.0,-45.0,-45.0,-45.0, 15);
         sleep(400);
         //robot.encoderDrive(0.8, 47.0, 47.0, 47.0, 47.0, 15);
@@ -100,34 +149,73 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         sleep(200);
         robot.encoderDrive(0.8, 17,17,17,17,12);
         sleep(200);
+        heading = (int)Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+
+        if (heading != 0) {
+            robot.setDrivePower(0.3,0.3,-0.3,-0.3);
+        }
+        while (heading != 0) {
+            heading = Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+            telemetry.addData("CORRECTING", "...");
+            if (heading == 0){ robot.setDrivePower(0,0,0,0); break;}
+        }
         robot.encoderDrive(0.8, -19,19,19,-19,15);
         sleep(200);
+        //the turn why is not going straight into the wall
         robot.encoderDrive(0.8,-45.5,-45.5,45.5,45.5,15);
         sleep(200);
+        heading = (int)Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+
+        if (heading != 180) {
+            robot.setDrivePower(-0.3,-0.3,0.3,0.3);
+        }
+        while (heading != 180) {
+            heading = Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+            telemetry.addData("CORRECTING", "...");
+            if (heading == 180){ robot.setDrivePower(0,0,0,0); break;}
+        }
+
+        robot.encoderArm(26,10);
+        //AprilTagDetection detect= tag.getDetections().get(0);
+
+
+
         //this is the value that makes the robot approach the wall to pick specimen
-        robot.encoderDrive(0.8,21.615,21.615,21.615,21.615,15);
+        robot.encoderDrive(0.9,50,50,50,50,15);
         sleep(200);
 
-        robot.encoderArm(22,10);
+
         robot.setHandPositions(-0.8);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
             telemetry.update();
         }
         sleep(1100);
-        robot.encoderArm(40,20);
-        robot.encoderDrive(1, -15.265,-15.265,-15.265,-15.265,15);
-        robot.encoderDrive(0.8,-47,-47,47,47,15);
+
+        robot.encoderArm(37,20);
+        robot.encoderDrive(1, -19,-19,-19,-19,15);
+        //robot.encoderArm(0,5);
+        robot.encoderDrive(0.8,48.5 ,48.5,-48.5,-48.5,15);
         sleep(200);
+
         //Strafes to the left to place sample
         robot.encoderDrive(1, -50,50,50,-50,15);
+        heading =(int) Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+        if (heading != 0) {
+            robot.setDrivePower(-0.3,-0.3,0.3,0.3);
+        }
+        while (heading != 0) {
+            heading = Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+            telemetry.addData("CORRECTING", "...");
+            if (heading == 0){ robot.setDrivePower(0,0,0,0); break;}
+        }
         //makes the arm go up
-        robot.encoderArm(13,10);
-        robot.encoderDrive(0.8,10.3,10.3,10.3,10.3,15);
+        robot.encoderArm(20,10);
+        robot.encoderDrive(0.8,12.8,12.8,12.8,12.8 ,15);
 
         sleep(150);
         //makes arm go down
-        robot.encoderArm(-35,10);
+        robot.encoderArm(-30,10);
 
 
         //Open claw
@@ -137,9 +225,24 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
             telemetry.update();
         }
         sleep(1000);
-        robot.encoderDrive(0.8, 12, -12,-12,12,15);
-        robot.encoderDrive(0.8, -25,-25,-25,-25,15);
+        robot.encoderDrive(0.8, 13, -13,-13,13,15);
+        robot.setHandPositions(-0.8);
+        while(opModeIsActive()&& (runtime.seconds()<0.5)){
+            telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        robot.encoderDrive(0.8, -30,-30,-30,-30,15);
+        sleep(100);
+        if (heading != 0) {
+            robot.setDrivePower(0.3,0.3,-0.3,-0.3);
+        }
+        while (heading != 0) {
+            heading = Math.round(robot.imu.getRobotYawPitchRollAngles().getYaw()/10) * 10;
+            telemetry.addData("CORRECTING", "...");
+            if (heading == 0){ robot.setDrivePower(0,0,0,0); break;}
+        }
         robot.encoderDrive(0.8, 35,-35,-35,35,15);
+        robot.encoderDrive(0.8,-12,-12,-12,-12,14);
 
         //The don't touch has ended, you can now modify the code
         /* Hello, let me show you the basics

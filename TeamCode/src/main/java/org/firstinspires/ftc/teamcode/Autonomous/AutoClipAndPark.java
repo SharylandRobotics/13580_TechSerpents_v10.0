@@ -1,9 +1,20 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import android.graphics.Canvas;
+import android.util.Size;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.VisionPortalImpl;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.opencv.core.Mat;
+
+import java.util.ArrayList;
 
 @Autonomous(name="Robot auto clip and park", group="Robot")
 public class AutoClipAndPark extends LinearOpMode {
@@ -124,7 +135,29 @@ public class AutoClipAndPark extends LinearOpMode {
             telemetry.update();
         }
         sleep(1000);
+        AprilTagProcessor tag= new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .build();
 
-
+        VisionPortal visionPortal = new VisionPortal.Builder()
+                .addProcessor(tag)
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCameraResolution(new Size(640, 480))
+                .build();
+        while (!isStopRequested() && opModeIsActive() ){
+            if (tag.getDetections().size() > 0){
+                AprilTagDetection detect= tag.getDetections().get(0);
+                telemetry.addData ("x", detect.ftcPose.x);
+                telemetry.addData ("y", detect.ftcPose.y);
+                telemetry.addData ("z", detect.ftcPose.z);
+                telemetry.addData ("roll", detect.ftcPose.roll);
+                telemetry.addData("pitch", detect.ftcPose.pitch);
+                telemetry.addData("yaw", detect.ftcPose.yaw);
+            }
+            telemetry.update();
+        }
     }
 }

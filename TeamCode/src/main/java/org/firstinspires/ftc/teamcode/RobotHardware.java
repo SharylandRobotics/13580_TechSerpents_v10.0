@@ -19,7 +19,12 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import static java.lang.Thread.sleep;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.*;
@@ -30,16 +35,16 @@ public class RobotHardware {
     private LinearOpMode myOpMode = null; // gains access to the methods in the calling OpMode.
 
     //Define motors and servo objects (make them private so they can't be accessed externally)
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
+    public DcMotor leftFrontDrive = null;
+    public DcMotor leftBackDrive = null;
+    public DcMotor rightFrontDrive = null;
+    public DcMotor rightBackDrive = null;
     public DcMotor upDown = null;
     public DcMotor hang=null;
     //private Servo wrist=null;
     //private Servo wheel=null;
     public DcMotor elbowHang=null;
-    private DcMotor spoolie=null;
+    public DcMotor spoolie=null;
     private Servo leftHand = null;
     private Servo rightHand = null;
 
@@ -57,11 +62,13 @@ public class RobotHardware {
     public final double ARM_SCORE_SAMPLE_IN_LOW   = 107 * ARM_TICKS_PER_DEGREE;
     public final double ARM_ATTACH_HANGING_HOOK   = 130 * ARM_TICKS_PER_DEGREE;
     public final double ARM_SECURE_SPECIMEN       = 70  * ARM_TICKS_PER_DEGREE;
-    public final double ARM_COLLECT               = 31 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_COLLECT               = 32 * ARM_TICKS_PER_DEGREE;
     public final double FUDGE_FACTOR              = 15 * ARM_TICKS_PER_DEGREE;
+    public final double SPOOLIE_COLLAPSED= 0;
+    public final double SPOOLIE_UP_TO_HANG= 15*COUNTS_PER_INCH;
 
     public double armPosition= (int)ARM_COLLAPSED_INTO_ROBOT;
-
+    public int targetArmPosition;
     public final double HANG_COLLAPSED_INTO_ROBOT =17*ARM_TICKS_PER_DEGREE;
     public final double HANG_UP = 180 * ARM_TICKS_PER_DEGREE;
     public IMU imu = null; // Universal IMU interface
@@ -91,6 +98,12 @@ public class RobotHardware {
     public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES*3.1415);
     public static final double DRIVE_SPEED =  0.6;
     public static final double TURN_SPEED= 0.5;
+
+    private static final boolean USE_WEBCAM = true;
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
+
+    public double armTarget=0;
 
     //Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware (LinearOpMode opmode) {myOpMode = opmode;}
@@ -303,7 +316,7 @@ public class RobotHardware {
         int armPositionFudgeFactor;
         if(myOpMode.opModeIsActive()){
             newArmTarget= upDown.getCurrentPosition()+(int)(armDegree * ARM_TICKS_PER_DEGREE);
-
+            armTarget=(int)(newArmTarget+FUDGE_FACTOR);
             upDown.setTargetPosition((int)(newArmTarget+FUDGE_FACTOR));
 
             upDown.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -311,7 +324,7 @@ public class RobotHardware {
             runtime.reset();
             upDown.setPower(Math.abs(1500));
 
-           while(myOpMode.opModeIsActive() && (runtime.seconds()<timeoutS)&&(upDown.isBusy())){
+           while(myOpMode.opModeIsActive()&&(runtime.seconds()<timeoutS) && (upDown.isBusy())){
                myOpMode.telemetry.addData("Running to",  " %7d ", newArmTarget);
                myOpMode.telemetry.addData("Currently at",  " at %7d ",
                        upDown.getCurrentPosition());
@@ -324,6 +337,98 @@ public class RobotHardware {
 
 
     }
+
+    public void encoderArmDrive(double speed,double leftFrontInches, double leftBackInches,
+                                double rightFrontInches, double rightBackInches,double armDegree,
+                                double timeoutS) {
+        int newLeftFrontTarget;
+        int newLeftBackTarget;
+        int newRightFrontTarget;
+        int newRightBackTarget;
+        int newArmTarget;
+
+        // Ensure that the OpMode is still active
+        if (myOpMode.opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+
+            newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int)(leftFrontInches * COUNTS_PER_INCH);
+            newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
+            newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightFrontInches * COUNTS_PER_INCH);
+            newRightBackTarget = rightBackDrive.getCurrentPosition() + (int)(rightBackInches * COUNTS_PER_INCH);
+            newArmTarget= upDown.getCurrentPosition()+(int)(armDegree * ARM_TICKS_PER_DEGREE);
+            leftFrontDrive.setTargetPosition(newLeftFrontTarget);
+            leftBackDrive.setTargetPosition(newLeftBackTarget);
+            rightFrontDrive.setTargetPosition(newRightFrontTarget);
+            rightBackDrive.setTargetPosition(newRightBackTarget);
+            upDown.setTargetPosition((int) armTarget);
+
+            // Turn On RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            upDown.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            setDrivePower(Math.abs(speed),Math.abs(speed),Math.abs(speed),Math.abs(speed));
+            upDown.setPower(Math.abs(1500));
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (myOpMode.opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (leftFrontDrive.isBusy() && leftBackDrive.isBusy()&& rightFrontDrive.isBusy() && rightBackDrive.isBusy())&&(upDown.isBusy())) {
+
+                // Display it for the driver.
+                myOpMode.telemetry.addData("Running to",  " %7d :%7d :%7d :%7d :%7d", newLeftFrontTarget,  newLeftBackTarget, newRightFrontTarget,  newRightBackTarget, newArmTarget);
+                myOpMode.telemetry.addData("Starting at",  " at %7d :%7d :%7d :%7d :%7d",
+                        leftFrontDrive.getCurrentPosition(),leftBackDrive.getCurrentPosition(), rightFrontDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition(), upDown.getCurrentPosition());
+                myOpMode.telemetry.update();
+            }
+
+            // Stop all motion;
+            leftFrontDrive.setPower(0);
+            leftBackDrive.setPower(0);
+            rightFrontDrive.setPower(0);
+            rightBackDrive.setPower(0);
+            upDown.setPower(0);
+
+
+            // Turn off RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            upDown.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //newArmTarget= upDown.getCurrentPosition()+(int)(armDegree * ARM_TICKS_PER_DEGREE);
+
+            //upDown.setTargetPosition((int)(newArmTarget+FUDGE_FACTOR));
+
+            //upDown.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            //runtime.reset();
+            //upDown.setPower(Math.abs(1500));
+
+           // while(myOpMode.opModeIsActive() && (runtime.seconds()<timeoutS)&&(upDown.isBusy())){
+                //myOpMode.telemetry.addData("Running to",  " %7d ", newArmTarget);
+                //myOpMode.telemetry.addData("Currently at",  " at %7d ",
+                        //upDown.getCurrentPosition());
+                //myOpMode.telemetry.update();
+            //}
+
+            //upDown.setPower(0);
+            //upDown.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
 
     public void encoderDrive(double speed,
                              double leftFrontInches, double leftBackInches,
@@ -338,6 +443,7 @@ public class RobotHardware {
         if (myOpMode.opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
+
             newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int)(leftFrontInches * COUNTS_PER_INCH);
             newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
             newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightFrontInches * COUNTS_PER_INCH);
@@ -357,6 +463,8 @@ public class RobotHardware {
             runtime.reset();
             setDrivePower(Math.abs(speed),Math.abs(speed),Math.abs(speed),Math.abs(speed));
             upDown.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            upDown.setTargetPosition((int) armTarget);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -388,6 +496,84 @@ public class RobotHardware {
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
         }
     }
+    public void encoderSpoolie(double speed,
+                             double spoolieInches,
+                             double timeoutS) {
+        int newSpoolieTarget;
+
+        // Ensure that the OpMode is still active
+        if (myOpMode.opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+
+            newSpoolieTarget = spoolie.getCurrentPosition() + (int)(spoolieInches * COUNTS_PER_INCH);
+
+            spoolie.setTargetPosition(newSpoolieTarget);
+
+            // Turn On RUN_TO_POSITION
+            spoolie.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            setSpooliePower(Math.abs(speed));
+            spoolie.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            spoolie.setTargetPosition(spoolie.getCurrentPosition());
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (myOpMode.opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (spoolie.isBusy())){
+
+                // Display it for the driver.
+                myOpMode.telemetry.addData("Running to",  " %7d", newSpoolieTarget);
+                myOpMode.telemetry.addData("Starting at",  " at %7d",
+                        spoolie.getCurrentPosition());
+                myOpMode.telemetry.update();
+            }
+
+            // Stop all motion;
+            spoolie.setPower(0);
+
+
+            // Turn off RUN_TO_POSITION
+            spoolie.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        }
+    }
+    private void initAprilTag() {
+        // Create the AprilTag processor by using a builder.
+        aprilTag = new AprilTagProcessor.Builder().build();
+
+        // Adjust Image Decimation to trade-off detection-range for detection-rate.
+        // e.g. Some typical detection data using a Logitech C920 WebCam
+        // Decimation = 1 ..  Detect 2" Tag from 10 feet away at 10 Frames per second
+        // Decimation = 2 ..  Detect 2" Tag from 6  feet away at 22 Frames per second
+        // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second
+        // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second
+        // Note: Decimation can be changed on-the-fly to adapt during a match.
+        aprilTag.setDecimation(2);
+
+        // Create the vision portal by using a builder.
+        if (USE_WEBCAM) {
+            visionPortal = new VisionPortal.Builder()
+                    .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                    .addProcessor(aprilTag)
+                    .build();
+        } else {
+            visionPortal = new VisionPortal.Builder()
+                    .setCamera(BuiltinCameraDirection.BACK)
+                    .addProcessor(aprilTag)
+                    .build();
+        }
+    }
+
 }

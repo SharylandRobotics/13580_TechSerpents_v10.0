@@ -31,7 +31,8 @@ public class FieldCentric extends LinearOpMode {
 
         robot.init();
         double armPosition = robot.ARM_COLLAPSED_INTO_ROBOT;
-
+        double spooliePosition= robot.SPOOLIE_COLLAPSED;
+        boolean claw=true;
 
         waitForStart();
 
@@ -44,11 +45,20 @@ public class FieldCentric extends LinearOpMode {
             robot.driveFieldCentric(axial, lateral, yaw);
 
             // assigns the gamepad 1 right bumper to open the claw  and the gamepad 1 left bumper to close the claw
-            if (gamepad1.right_bumper) {
+
+
+            if(gamepad2.right_stick_button ){
+               claw=!claw;
+           }
+
+            sleep(10);
+            if (claw) {
                 handOffset += robot.HAND_SPEED;
-            } else if (gamepad1.left_bumper) {
+            } else if(!claw){
                 handOffset -= robot.HAND_SPEED;
             }
+
+
             handOffset = Range.clip(handOffset, -0.1, 0.5);
             //passes the positions of the hand to the robotHardware class without this line it will not move
             robot.setHandPositions(handOffset);
@@ -84,6 +94,7 @@ public class FieldCentric extends LinearOpMode {
             } else if (gamepad2.y) {
                 armPosition = robot.ARM_SCORE_SAMPLE_IN_LOW;
             }else if (gamepad2.dpad_down){
+                robot.setSpooliePower(100);
                 armPosition= robot.ARM_SECURE_SPECIMEN;
             }else if(gamepad2.dpad_up){
                 armPosition = robot.ARM_SCORE_SPECIMEN;
@@ -94,7 +105,7 @@ public class FieldCentric extends LinearOpMode {
             }else if(gamepad2.left_stick_button){
                 armPosition=robot.ARM_COLLECT;
             }
-            armPositionFudgeFactor = robot.FUDGE_FACTOR * (gamepad1.right_trigger + (-gamepad1.left_trigger));
+            armPositionFudgeFactor = robot.FUDGE_FACTOR * (gamepad2.right_trigger + (-gamepad2.left_trigger));
 
             robot.upDown.setTargetPosition((int) (armPosition + armPositionFudgeFactor));
             ((DcMotorEx)robot.upDown).setVelocity(2100);
