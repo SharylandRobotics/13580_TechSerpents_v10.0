@@ -59,7 +59,8 @@ public class FieldCentric extends LinearOpMode {
             }
 
 
-            handOffset = Range.clip(handOffset, -0.1, 0.5);
+            //handOffset = Range.clip(handOffset, -0.1, 0.5);
+            handOffset = Range.clip(handOffset,0,-0.3);
             //passes the positions of the hand to the robotHardware class without this line it will not move
             robot.setHandPositions(handOffset);
 

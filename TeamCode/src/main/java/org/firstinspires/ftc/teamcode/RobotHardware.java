@@ -46,7 +46,7 @@ public class RobotHardware {
     public DcMotor elbowHang=null;
     public DcMotor spoolie=null;
     private Servo leftHand = null;
-    private Servo rightHand = null;
+    //private Servo rightHand = null;
 
     //upDown motor configuration to use encoder
     public final double ARM_TICKS_PER_DEGREE= 28
@@ -137,9 +137,9 @@ public class RobotHardware {
         elbowHang.setDirection(DcMotor.Direction.REVERSE);
 
         leftHand= myOpMode.hardwareMap.get(Servo.class, "left_hand");
-        rightHand=myOpMode.hardwareMap.get(Servo.class, "right_hand");
+        //rightHand=myOpMode.hardwareMap.get(Servo.class, "right_hand");
         leftHand.setPosition(MID_SERVO);
-        rightHand.setPosition(MID_SERVO);
+        //rightHand.setPosition(MID_SERVO);
 
         imu= myOpMode.hardwareMap.get(IMU.class, "imu");
 
@@ -307,7 +307,7 @@ public class RobotHardware {
     public void setHandPositions(double offset) {
         offset = Range.clip(offset, -0.5, 0.5 );
         leftHand.setPosition(MID_SERVO + offset);
-        rightHand.setPosition(MID_SERVO - offset);
+        //rightHand.setPosition(MID_SERVO - offset);
 
     }
 
