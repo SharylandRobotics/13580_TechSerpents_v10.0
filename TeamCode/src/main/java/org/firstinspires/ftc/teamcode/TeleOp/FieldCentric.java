@@ -32,7 +32,9 @@ public class FieldCentric extends LinearOpMode {
         robot.init();
         double armPosition = robot.ARM_COLLAPSED_INTO_ROBOT;
         double spooliePosition= robot.SPOOLIE_COLLAPSED;
-        boolean claw=true;
+        boolean claw=false;
+
+        int clawTimer = 0;
 
         waitForStart();
 
@@ -47,22 +49,26 @@ public class FieldCentric extends LinearOpMode {
             // assigns the gamepad 1 right bumper to open the claw  and the gamepad 1 left bumper to close the claw
 
 
-            if(gamepad2.right_stick_button ){
+            if(gamepad2.right_stick_button && clawTimer >= 20){
                claw=!claw;
+               clawTimer = 0;
            }
+            clawTimer++;
 
-            sleep(10);
             if (claw) {
-                handOffset += robot.HAND_SPEED;
+                robot.leftHand.setPosition(0);
+
+                //handOffset += robot.HAND_SPEED;
             } else if(!claw){
-                handOffset -= robot.HAND_SPEED;
+                //handOffset -= robot.HAND_SPEED;
+                robot.leftHand.setPosition(0.7);
             }
 
 
             //handOffset = Range.clip(handOffset, -0.1, 0.5);
-            handOffset = Range.clip(handOffset,0,-0.3);
+            //handOffset = Range.clip(handOffset,0.05,-0.1);
             //passes the positions of the hand to the robotHardware class without this line it will not move
-            robot.setHandPositions(handOffset);
+            //robot.setHandPositions(handOffset);
 
             //passes the position of the elbow of the robot(the motor in the arm, not the spoolie)
             //to up when pressing the right bumper in the game controller 2

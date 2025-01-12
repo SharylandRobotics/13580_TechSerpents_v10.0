@@ -45,7 +45,7 @@ public class RobotHardware {
     //private Servo wheel=null;
     public DcMotor elbowHang=null;
     public DcMotor spoolie=null;
-    private Servo leftHand = null;
+    public Servo leftHand = null;
     //private Servo rightHand = null;
 
     //upDown motor configuration to use encoder
@@ -86,7 +86,7 @@ public class RobotHardware {
 
 
     // Define the drive constants. Make them public so they CAN be used by the calling OpMOde
-    public static final double MID_SERVO = 0.5 ;
+    public static final double MID_SERVO = 0.7 ;
     public static final double HAND_SPEED = 0.2;
     public static final double ARM_UP_POWER = 0.5;
     public static final double ARM_DOWN_POWER = -0.45;

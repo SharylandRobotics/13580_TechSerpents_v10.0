@@ -39,7 +39,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
                 .build();
 
         //Closes the claw to secure the specimen
-        robot.setHandPositions(-0.8);
+        robot.setHandPositions(0.6);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -91,7 +91,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
 
         sleep(100);
         //Open claw
-        robot.setHandPositions(0.5);
+        robot.setHandPositions(0.3);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg6: %41f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -100,6 +100,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         robot.encoderArm(-70 ,15);
         robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
         robot.encoderDrive(0.8,24.3,24.3,24.3,24.3,15);
+        /*
         sleep(200);
         robot.encoderDrive(0.8,12,-12,-12,12, 15);
         // correft before 1st sample
@@ -243,7 +244,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         }
         robot.encoderDrive(0.8, 35,-35,-35,35,15);
         robot.encoderDrive(0.8,-12,-12,-12,-12,14);
-
+        */
         //The don't touch has ended, you can now modify the code
         /* Hello, let me show you the basics
         <-the 86 is referred to as line 86 of code so each line has a number
