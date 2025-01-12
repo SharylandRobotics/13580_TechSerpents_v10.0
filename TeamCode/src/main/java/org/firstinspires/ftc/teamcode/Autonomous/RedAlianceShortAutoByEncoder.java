@@ -39,7 +39,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
                 .build();
 
         //Closes the claw to secure the specimen
-        robot.setHandPositions(0.6);
+        robot.setHandPositions(0.5);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -52,26 +52,12 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
 
         //go straight for 2 squares
         robot.encoderDrive(0.7,24.0,24.0,24.0,24.0, 15);
-        /*
-        robot.setDrivePower(0.5,0.5,0.5,0.5);
-        runtime.reset();
-        while (opModeIsActive()&&(runtime.seconds()<0.0068)){
-            telemetry.addData("Path", "Leg3: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        */
+
 
 
         //strafe to the left a little bit
-        robot.encoderDrive(0.6,-10.0,10.0,10.0,-10.0, 15);
-        /*
-        robot.setDrivePower(-0.5,0.5,0.5,-0.5);
-        runtime.reset();
-        while (opModeIsActive()&&(runtime.seconds()<0.000002)){
-            telemetry.addData("Path", "Leg2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        */
+        //robot.encoderDrive(0.6,-10.0,10.0,10.0,-10.0, 15);
+
 
 
 
@@ -87,16 +73,17 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         sleep(1000);
 */
         //makes the elbow go down
-        robot.encoderArm(-25,10);
+        //robot.encoderArm(-25,10);
 
         sleep(100);
         //Open claw
-        robot.setHandPositions(0.3);
+        robot.leftHand.setPosition(0);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg6: %41f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        robot.encoderDrive(0.8,-4.5,-4.5,-4.5,-4.5,15);
+        sleep(100);
+        robot.encoderDrive(0.8,-6.5,-6.5,-6.5,-6.5,15);
         robot.encoderArm(-70 ,15);
         robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
         robot.encoderDrive(0.8,24.3,24.3,24.3,24.3,15);
