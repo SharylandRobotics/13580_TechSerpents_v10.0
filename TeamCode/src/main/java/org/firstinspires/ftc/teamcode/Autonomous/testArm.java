@@ -14,12 +14,12 @@ public class testArm extends LinearOpMode {
     public void runOpMode(){
         robot.init();
         waitForStart();
-        robot.encoderDrive(0.7,26.0,26.0,26.0,26.0, 15);
-        robot.encoderArm(57, 10);
-        sleep(50);
-        robot.encoderDrive(0.5,4,4,4,4,20);
-        sleep(100);
-        robot.encoderSpoolie(0.2,10,20);
+        robot.setHandPositions(1);
+        while(opModeIsActive()&& (runtime.seconds()<0.5)){
+            telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        sleep(1000);
         //robot.encoderArm(17,10);
         //robot.encoderDrive(0.2,40,40,40,40,17);
     }

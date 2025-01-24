@@ -39,7 +39,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
                 .build();
 
         //Closes the claw to secure the specimen
-        robot.leftHand.setPosition(0.4);
+        robot.leftHand.setPosition(1);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -51,10 +51,10 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         //robot.upDown.setTargetPosition((int)((73*robot.ARM_TICKS_PER_DEGREE)));
 
         //go straight for 2 squares
-        robot.encoderDrive(0.7,26.0,26.0,26.0,26.0, 15);
-        robot.encoderArm(57, 10);
+        robot.encoderDrive(0.7,24.0,24.0,24.0,24.0, 15);
+        robot.encoderArm(60, 10);
         sleep(50);
-        robot.encoderDrive(0.5,4,4,4,4,20);
+        robot.encoderDrive(0.5,8,8,8,8,20);
         sleep(100);
         robot.encoderSpoolie(0.2,10,20);
 
@@ -74,7 +74,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
             telemetry.update();
         }
         sleep(300);
-        robot.encoderDrive(3.0,-8,-8,-8,-8,15);
+        robot.encoderDrive(3.0,-10,-10,-10,-10,15);
         //sleep(100);
         robot.encoderArm(-70 ,15);
         //robot.encoderDrive(5.0,0.4,0.4,-0.4,-0.4 ,20);
@@ -85,7 +85,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         //robot.encoderArm(-70 ,15);
         robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
         sleep(100);
-        robot.encoderDrive(0.8,22.3,22.3,22.3,22.3,15);
+        robot.encoderDrive(0.8,26.3,26.3,26.3,26.3,15);
         robot.encoderDrive(0.8,2.3,2.3,2.3,2.3,20);
         sleep(100);
         robot.encoderDrive(0.8,12,-12,-12,12, 15);
@@ -108,7 +108,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         robot.encoderDrive(0.8,-45.5,-45.5,45.5,45.5,15);
         robot.encoderDrive(0.9,17,17,17,17,15);
         sleep(200);
-        robot.encoderArm(26,10);
+        robot.encoderArm(20,10);
         robot.leftHand.setPosition(0.4);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
@@ -120,11 +120,11 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         robot.encoderDrive(0.9,45,45,-45,-45,15);
         //robot.encoderDrive(0.8,48.5 ,48.5,-48.5,-48.5,15);
         sleep(100);
-        robot.encoderDrive(1, -30,30,30,-30,15);
+        robot.encoderDrive(1, -35,35,35,-35,15);
         //robot.encoderDrive(0.7,26.0,26.0,26.0,26.0, 15);
         robot.encoderArm(57, 10);
         sleep(50);
-        robot.encoderDrive(0.5,4,4,4,4,20);
+        robot.encoderDrive(0.5,6,6,6,6,20);
         sleep(100);
         robot.encoderSpoolie(0.2,10,20);
 

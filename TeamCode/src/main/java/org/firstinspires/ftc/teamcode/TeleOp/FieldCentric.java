@@ -101,7 +101,7 @@ public class FieldCentric extends LinearOpMode {
             } else if (gamepad2.y) {
                 armPosition = robot.ARM_SCORE_SAMPLE_IN_LOW;
             }else if (gamepad2.dpad_down){
-                robot.setSpooliePower(100);
+                //robot.setSpooliePower(100);
                 armPosition= robot.ARM_SECURE_SPECIMEN;
             }else if(gamepad2.dpad_up){
                 armPosition = robot.ARM_SCORE_SPECIMEN;

@@ -61,7 +61,7 @@ public class RobotHardware {
     public final double ARM_SCORE_SPECIMEN        = 83 * ARM_TICKS_PER_DEGREE;
     public final double ARM_SCORE_SAMPLE_IN_LOW   = 107 * ARM_TICKS_PER_DEGREE;
     public final double ARM_ATTACH_HANGING_HOOK   = 130 * ARM_TICKS_PER_DEGREE;
-    public final double ARM_SECURE_SPECIMEN       = 68  * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SECURE_SPECIMEN       = 69  * ARM_TICKS_PER_DEGREE;
     public final double ARM_COLLECT               = 28 * ARM_TICKS_PER_DEGREE;
     public final double FUDGE_FACTOR              = 15 * ARM_TICKS_PER_DEGREE;
     public final double SPOOLIE_COLLAPSED= 0;
