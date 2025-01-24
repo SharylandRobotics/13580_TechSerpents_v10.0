@@ -49,7 +49,7 @@ public class FieldCentric extends LinearOpMode {
             // assigns the gamepad 1 right bumper to open the claw  and the gamepad 1 left bumper to close the claw
 
 
-            if(gamepad2.right_stick_button && clawTimer >= 15){
+            if(gamepad2.right_stick_button && clawTimer >= 13){
                claw=!claw;
                clawTimer = 0;
            }
@@ -61,7 +61,7 @@ public class FieldCentric extends LinearOpMode {
                 //handOffset += robot.HAND_SPEED;
             } else if(!claw){
                 //handOffset -= robot.HAND_SPEED;
-                robot.leftHand.setPosition(0.5);
+                robot.leftHand.setPosition(1);
             }
 
 
@@ -74,9 +74,9 @@ public class FieldCentric extends LinearOpMode {
             //to up when pressing the right bumper in the game controller 2
             // ad to down when pressing the left bumper of gam controller 2
             if (gamepad2.right_bumper) {
-                spoolie = robot.ARM_UP_POWER;
+                spoolie = robot.SPOOLIE_UP_POWER;
             } else if (gamepad2.left_bumper) {
-                spoolie = robot.ARM_DOWN_POWER;
+                spoolie = robot.SPOOLIE_DOWN_POWER;
             } else {
                 spoolie = 0;
             }

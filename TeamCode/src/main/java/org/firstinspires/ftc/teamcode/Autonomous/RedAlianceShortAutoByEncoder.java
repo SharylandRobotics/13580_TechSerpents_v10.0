@@ -13,7 +13,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 
-@Autonomous(name="Robot red: Auto Drive By Encoder", group="Robot")
+@Autonomous(name="clip", group="Robot")
 
 public class RedAlianceShortAutoByEncoder extends LinearOpMode {
     RobotHardware robot= new RobotHardware(this);
@@ -39,7 +39,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
                 .build();
 
         //Closes the claw to secure the specimen
-        robot.setHandPositions(0.5);
+        robot.leftHand.setPosition(0.4);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -47,12 +47,16 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         sleep(1000);
         //Don't touch this it already works
 
-        robot.encoderArm(73, 10);
+        //robot.encoderArm(62, 10);
         //robot.upDown.setTargetPosition((int)((73*robot.ARM_TICKS_PER_DEGREE)));
 
         //go straight for 2 squares
-        robot.encoderDrive(0.7,24.0,24.0,24.0,24.0, 15);
-
+        robot.encoderDrive(0.7,26.0,26.0,26.0,26.0, 15);
+        robot.encoderArm(57, 10);
+        sleep(50);
+        robot.encoderDrive(0.5,4,4,4,4,20);
+        sleep(100);
+        robot.encoderSpoolie(0.2,10,20);
 
 
         //strafe to the left a little bit
@@ -62,7 +66,68 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
 
 
         //go straight for 2 squares
-        robot.encoderDrive(5.0,8,8,8,8,15);
+        //robot.encoderDrive(5.0,8,8,8,8,15);
+        sleep(100);
+        robot.leftHand.setPosition(0);
+        while(opModeIsActive()&& (runtime.seconds()<0.5)){
+            telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        sleep(300);
+        robot.encoderDrive(3.0,-8,-8,-8,-8,15);
+        //sleep(100);
+        robot.encoderArm(-70 ,15);
+        //robot.encoderDrive(5.0,0.4,0.4,-0.4,-0.4 ,20);
+
+
+
+
+        //robot.encoderArm(-70 ,15);
+        robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
+        sleep(100);
+        robot.encoderDrive(0.8,22.3,22.3,22.3,22.3,15);
+        robot.encoderDrive(0.8,2.3,2.3,2.3,2.3,20);
+        sleep(100);
+        robot.encoderDrive(0.8,12,-12,-12,12, 15);
+        sleep(300);
+        robot.encoderDrive(0.8,-42.0,-42.0,-42.0,-42.0, 20);
+        robot.encoderDrive(0.2,-2,-2,-2,-2,20);
+        sleep(300);
+        robot.encoderDrive(0.8, 43.0, 43.00, 43.0, 43.0, 15);
+        robot.encoderDrive(0.3,3,3,3,3,20);
+        sleep(100);
+        robot.encoderDrive(0.8, 15.5, -15.5, -15.5, 15.5, 15);
+        sleep(100);
+        robot.encoderDrive(0.8,-45.0,-45.0,-45.0,-45.0, 15);
+        sleep(200);
+        robot.encoderDrive(0.8, 17,17,17,17,12);
+        sleep(200);
+        robot.encoderDrive(0.8, -19,19,19,-19,15);
+        sleep(200);
+        //the turn why is not going straight into the wall
+        robot.encoderDrive(0.8,-45.5,-45.5,45.5,45.5,15);
+        robot.encoderDrive(0.9,17,17,17,17,15);
+        sleep(200);
+        robot.encoderArm(26,10);
+        robot.leftHand.setPosition(0.4);
+        while(opModeIsActive()&& (runtime.seconds()<0.5)){
+            telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        sleep(1000);
+        robot.encoderDrive(1, -19,-19,-19,-19,15);
+        sleep(200);
+        robot.encoderDrive(0.9,45,45,-45,-45,15);
+        //robot.encoderDrive(0.8,48.5 ,48.5,-48.5,-48.5,15);
+        sleep(100);
+        robot.encoderDrive(1, -30,30,30,-30,15);
+        //robot.encoderDrive(0.7,26.0,26.0,26.0,26.0, 15);
+        robot.encoderArm(57, 10);
+        sleep(50);
+        robot.encoderDrive(0.5,4,4,4,4,20);
+        sleep(100);
+        robot.encoderSpoolie(0.2,10,20);
+
         /*
         robot.setDrivePower(0.2,0.2,0.2,0.2);
         runtime.reset();
@@ -74,7 +139,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
 */
         //makes the elbow go down
         //robot.encoderArm(-25,10);
-
+        /*
         sleep(100);
         //Open claw
         robot.leftHand.setPosition(0);
@@ -87,7 +152,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         robot.encoderArm(-70 ,15);
         robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
         robot.encoderDrive(0.8,24.3,24.3,24.3,24.3,15);
-        /*
+
         sleep(200);
         robot.encoderDrive(0.8,12,-12,-12,12, 15);
         // correft before 1st sample
@@ -232,6 +297,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         robot.encoderDrive(0.8, 35,-35,-35,35,15);
         robot.encoderDrive(0.8,-12,-12,-12,-12,14);
         */
+
         //The don't touch has ended, you can now modify the code
         /* Hello, let me show you the basics
         <-the 86 is referred to as line 86 of code so each line has a number

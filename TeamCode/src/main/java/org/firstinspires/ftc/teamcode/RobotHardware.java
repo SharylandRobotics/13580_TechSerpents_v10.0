@@ -61,8 +61,8 @@ public class RobotHardware {
     public final double ARM_SCORE_SPECIMEN        = 83 * ARM_TICKS_PER_DEGREE;
     public final double ARM_SCORE_SAMPLE_IN_LOW   = 107 * ARM_TICKS_PER_DEGREE;
     public final double ARM_ATTACH_HANGING_HOOK   = 130 * ARM_TICKS_PER_DEGREE;
-    public final double ARM_SECURE_SPECIMEN       = 70  * ARM_TICKS_PER_DEGREE;
-    public final double ARM_COLLECT               = 32 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SECURE_SPECIMEN       = 68  * ARM_TICKS_PER_DEGREE;
+    public final double ARM_COLLECT               = 28 * ARM_TICKS_PER_DEGREE;
     public final double FUDGE_FACTOR              = 15 * ARM_TICKS_PER_DEGREE;
     public final double SPOOLIE_COLLAPSED= 0;
     public final double SPOOLIE_UP_TO_HANG= 15*COUNTS_PER_INCH;
@@ -86,10 +86,12 @@ public class RobotHardware {
 
 
     // Define the drive constants. Make them public so they CAN be used by the calling OpMOde
-    public static final double MID_SERVO = 0.7 ;
+    public static final double MID_SERVO = 0.3;
     public static final double HAND_SPEED = 0.2;
     public static final double ARM_UP_POWER = 0.5;
     public static final double ARM_DOWN_POWER = -0.45;
+    public static final double SPOOLIE_UP_POWER = 1;
+    public static final double SPOOLIE_DOWN_POWER = -0.8;
 
     //Define encoder constants
     public static final double COUNTS_PER_MOTOR_REV = 537.7;
@@ -518,7 +520,7 @@ public class RobotHardware {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            setSpooliePower(Math.abs(speed));
+            setSpooliePower(Math.abs(2100));
             spoolie.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             spoolie.setTargetPosition(spoolie.getCurrentPosition());

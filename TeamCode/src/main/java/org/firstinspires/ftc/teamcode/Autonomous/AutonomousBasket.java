@@ -16,17 +16,22 @@ public class AutonomousBasket extends LinearOpMode {
         double heading;
         waitForStart();
 
-        robot.setHandPositions(-0.8);
+        robot.leftHand.setPosition(-0.8);
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
             telemetry.update();
         }
         sleep(1000);
 
-        robot.encoderDrive(0.7, -39, 39, 39, -39, 15);
-        robot.encoderDrive(0.8, -30, -30, 30, 30, 15);
-        robot.encoderArm(107, 12);
-        robot.encoderSpoolie(2000, 40, 15);
+        robot.encoderDrive(0.7, -12, 12, 12, -12, 15);
+        robot.encoderDrive(0.8, -35, -35, 35, 35, 15);
+        robot.encoderArm(87, 12);
+        robot.setSpooliePower(100);
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+            telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        //robot.encoderSpoolie(2000, 127, 15);
     }
 
 
