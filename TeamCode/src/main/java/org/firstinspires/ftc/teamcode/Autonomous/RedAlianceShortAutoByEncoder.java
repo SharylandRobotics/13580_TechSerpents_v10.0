@@ -83,10 +83,10 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
 
 
         //robot.encoderArm(-70 ,15);
-        robot.encoderDrive(0.8,33.0,-33.0,-33.0,33.0, 15);
+        robot.encoderDrive(0.8,31.5,-31.5,-31.5,31.5, 15);
         sleep(100);
         robot.encoderDrive(0.8,26.3,26.3,26.3,26.3,15);
-        robot.encoderDrive(0.8,2.3,2.3,2.3,2.3,20);
+        robot.encoderDrive(0.8,4.3,4.3,4.3,4.3,20);
         sleep(100);
         robot.encoderDrive(0.8,12,-12,-12,12, 15);
         sleep(300);
@@ -98,7 +98,8 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         sleep(100);
         robot.encoderDrive(0.8, 15.5, -15.5, -15.5, 15.5, 15);
         sleep(100);
-        robot.encoderDrive(0.8,-45.0,-45.0,-45.0,-45.0, 15);
+        robot.encoderDrive(0.8,-43.0,-43.0,-43.0,-43.0, 15);
+        robot.encoderDrive(0.2,-2,-2,-2,-2,20);
         sleep(200);
         robot.encoderDrive(0.8, 17,17,17,17,12);
         sleep(200);
@@ -106,9 +107,9 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         sleep(200);
         //the turn why is not going straight into the wall
         robot.encoderDrive(0.8,-45.5,-45.5,45.5,45.5,15);
-        robot.encoderDrive(0.9,17,17,17,17,15);
+        robot.encoderDrive(0.9,19.5,19.5,19.5,19.5,15);
         sleep(200);
-        robot.encoderArm(20,10);
+        robot.encoderArm(17,10);
         robot.leftHand.setPosition(0.4);
         while(opModeIsActive()&& (runtime.seconds()<0.5)){
             telemetry.addData("Path", "Leg1: %41f S Elapsed", runtime.seconds());
