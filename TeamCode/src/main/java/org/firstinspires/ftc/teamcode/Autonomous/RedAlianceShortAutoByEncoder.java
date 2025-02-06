@@ -96,7 +96,7 @@ public class RedAlianceShortAutoByEncoder extends LinearOpMode {
         robot.encoderDrive(0.8, 43.0, 43.00, 43.0, 43.0, 15);
         robot.encoderDrive(0.3,3,3,3,3,20);
         sleep(100);
-        robot.encoderDrive(0.8, 15.5, -15.5, -15.5, 15.5, 15);
+        robot.encoderDrive(0.8, 14.5, -14.5, -14.5, 14.5, 15);
         sleep(100);
         robot.encoderDrive(0.8,-43.0,-43.0,-43.0,-43.0, 15);
         robot.encoderDrive(0.2,-2,-2,-2,-2,20);

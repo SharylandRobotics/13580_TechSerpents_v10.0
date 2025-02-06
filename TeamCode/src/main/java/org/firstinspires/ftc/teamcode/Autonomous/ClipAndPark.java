@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.util.Size;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+@Autonomous(name="clipAndPark", group="Robot")
 public class ClipAndPark extends LinearOpMode {
     RobotHardware robot= new RobotHardware(this);
     private ElapsedTime runtime= new ElapsedTime();
@@ -89,7 +91,7 @@ public class ClipAndPark extends LinearOpMode {
         robot.encoderDrive(0.8, 43.0, 43.00, 43.0, 43.0, 15);
         robot.encoderDrive(0.3,3,3,3,3,20);
         sleep(100);
-        robot.encoderDrive(0.8, 15.5, -15.5, -15.5, 15.5, 15);
+        robot.encoderDrive(0.8, 14.5, -14.5, -14.5, 14.5, 15);
         sleep(100);
         robot.encoderDrive(0.8,-43.0,-43.0,-43.0,-43.0, 15);
         robot.encoderDrive(0.2,-2,-2,-2,-2,20);

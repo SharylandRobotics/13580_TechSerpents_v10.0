@@ -61,7 +61,7 @@ public class FieldCentric extends LinearOpMode {
                 //handOffset += robot.HAND_SPEED;
             } else if(!claw){
                 //handOffset -= robot.HAND_SPEED;
-                robot.leftHand.setPosition(1);
+                robot.leftHand.setPosition(0.35);
             }
 
 
@@ -97,11 +97,13 @@ public class FieldCentric extends LinearOpMode {
             } else if (gamepad2.b) {
                 armPosition = robot.ARM_ATTACH_HANGING_HOOK;
             } else if (gamepad2.x) {
+                //robot.wrist.setPosition(1);
                 armPosition = robot.ARM_CLEAR_BARRIER;
             } else if (gamepad2.y) {
                 armPosition = robot.ARM_SCORE_SAMPLE_IN_LOW;
             }else if (gamepad2.dpad_down){
                 //robot.setSpooliePower(100);
+                //robot.wrist.setPosition(0);
                 armPosition= robot.ARM_SECURE_SPECIMEN;
             }else if(gamepad2.dpad_up){
                 armPosition = robot.ARM_SCORE_SPECIMEN;
@@ -114,6 +116,11 @@ public class FieldCentric extends LinearOpMode {
             }
             armPositionFudgeFactor = robot.FUDGE_FACTOR * (gamepad2.right_trigger + (-gamepad2.left_trigger));
 
+            if(gamepad1.a){
+                robot.wrist.setPosition(0.04);
+            }else if(gamepad1.b){
+                robot.wrist.setPosition(.70);
+            }
             robot.upDown.setTargetPosition((int) (armPosition + armPositionFudgeFactor));
             ((DcMotorEx)robot.upDown).setVelocity(2100);
             robot.upDown.setMode(DcMotor.RunMode.RUN_TO_POSITION);

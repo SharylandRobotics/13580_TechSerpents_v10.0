@@ -46,7 +46,8 @@ public class RobotHardware {
     public DcMotor elbowHang=null;
     public DcMotor spoolie=null;
     public Servo leftHand = null;
-    //private Servo rightHand = null;
+    public Servo wrist = null;
+    public Servo sweep= null;
 
     //upDown motor configuration to use encoder
     public final double ARM_TICKS_PER_DEGREE= 28
@@ -61,7 +62,7 @@ public class RobotHardware {
     public final double ARM_SCORE_SPECIMEN        = 83 * ARM_TICKS_PER_DEGREE;
     public final double ARM_SCORE_SAMPLE_IN_LOW   = 107 * ARM_TICKS_PER_DEGREE;
     public final double ARM_ATTACH_HANGING_HOOK   = 130 * ARM_TICKS_PER_DEGREE;
-    public final double ARM_SECURE_SPECIMEN       = 69  * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SECURE_SPECIMEN       = 190  * ARM_TICKS_PER_DEGREE;
     public final double ARM_COLLECT               = 28 * ARM_TICKS_PER_DEGREE;
     public final double FUDGE_FACTOR              = 15 * ARM_TICKS_PER_DEGREE;
     public final double SPOOLIE_COLLAPSED= 0;
@@ -87,6 +88,8 @@ public class RobotHardware {
 
     // Define the drive constants. Make them public so they CAN be used by the calling OpMOde
     public static final double MID_SERVO = 0.3;
+    public static final double ZERO_SERVO = 0.025;
+    public static final double RETRACT_SERVO=0.5;
     public static final double HAND_SPEED = 0.2;
     public static final double ARM_UP_POWER = 0.5;
     public static final double ARM_DOWN_POWER = -0.45;
@@ -139,9 +142,13 @@ public class RobotHardware {
         elbowHang.setDirection(DcMotor.Direction.REVERSE);
 
         leftHand= myOpMode.hardwareMap.get(Servo.class, "left_hand");
-        //rightHand=myOpMode.hardwareMap.get(Servo.class, "right_hand");
+        wrist=myOpMode.hardwareMap.get(Servo.class, "wrist");
         leftHand.setPosition(MID_SERVO);
-        //rightHand.setPosition(MID_SERVO);
+        wrist.setPosition(ZERO_SERVO);
+
+        sweep=myOpMode.hardwareMap.get(Servo.class, "sweep");
+        sweep.setPosition(RETRACT_SERVO);
+
 
         imu= myOpMode.hardwareMap.get(IMU.class, "imu");
 
